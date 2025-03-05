@@ -51,6 +51,7 @@ export function loginUser(req, res) {
                     isEmailVerified:user.isEmailVerified
 
                 }
+                console.log(userData)
 
                 const token=jwt.sign(userData,"random456")
                 res.json({

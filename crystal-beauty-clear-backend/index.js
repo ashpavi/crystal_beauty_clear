@@ -1,9 +1,8 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import mongoose from 'mongoose';
-import studentRouter from './routes/studentRouter.js';
-import itemRouter from './routes/itemRouter.js';
 import userRouter from './routes/userRouter.js';
+import jwt, { decode } from 'jsonwebtoken';
 
 
 const app = express();
@@ -22,11 +21,26 @@ mongoose.connect("mongodb+srv://admin:123@cluster0.fc5yt.mongodb.net/?retryWrite
 //BodyParser is used to simplify the process of parsing the body of an HTTP request
 app.use(bodyParser.json());
 
-//we imported the studentRouter
-app.use("/api/student", studentRouter)
+//middleware 
+app.use((req,res,next)=>{
+    const header= req.header("Authorization");
+    if(header != null){
+        const token= header.replace("Bearer ","") //this will remove the bearer from the token
+    
+    console.log(token) // this will print the token
+    jwt.verify(token, "random456",(err, decoded)=>{      //this will verify the token
+        console.log(decoded) //this will print the decoded token
 
-app.use("/api/item", itemRouter)
+        if(decoded != null){     //if the token is not null then we will set the user to the decoded token
+            req.user= decoded
+        }
+    }) 
+    }
+     next(); //next is used to pass the control to the next middleware function 
+})
 
+
+//importing the studentRouter
 app.use("/api/user", userRouter)
 
 
