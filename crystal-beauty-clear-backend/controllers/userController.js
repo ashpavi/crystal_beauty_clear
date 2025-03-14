@@ -3,6 +3,21 @@ import User from "../models/user.js";
 import jwt from "jsonwebtoken";
 
 export function saveUser(req, res) {
+
+    if(req.body.role== "admin"){     //ony admin can create another admin
+        if(req.user==null){     //if user is not logged in
+            res.status(403).json({
+                message:"Please login as admin before creating admin account"
+            })
+            return;
+        }
+        if(req.user.role!="admin"){     //if user is not admin
+            res.status(403).json({
+                message:"You are not authorized to create admin account"
+            })
+            return;
+        }
+    }
     
     //to create a hash password
     const hashedPassword = bcrypt.hashSync(req.body.password,10)
@@ -10,7 +25,8 @@ export function saveUser(req, res) {
         email: req.body.email,
         firstName:req.body.firstName,
         lastName:req.body.lastName,
-        password: hashedPassword
+        password: hashedPassword,
+        role:req.body.role,
     })
 
     user.save().then(()=>{
