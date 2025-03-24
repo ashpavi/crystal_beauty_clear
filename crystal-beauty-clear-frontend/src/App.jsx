@@ -1,34 +1,23 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
+import Header from './components/header'
+import ProductCard from './components/productCard'
 
 function App() {
-  const [count, setCount] = useState(0)
+  return(
+    <div className="w-full h-screen bg-orange-200">
+    <div className="w-[500px] h-[500px] bg-gray-300 flex flex-col items-center relative">
 
-  return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+      <div className="w-[90px] h-[90px] bg-red-500">
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
+      <div className="w-[90px] h-[90px] bg-yellow-500 absolute right-[50px] bottom -[50px]">
       </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+      <div className="w-[90px] h-[90px] bg-blue-500 fixed right-[50px] bottom-[50px]">
+      </div>
+      <div className="w-[90px] h-[90px] bg-green-500">
+      </div>
+
+    </div>
+    </div>
   )
 }
 
