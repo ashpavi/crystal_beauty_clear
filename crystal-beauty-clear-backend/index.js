@@ -1,6 +1,8 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import mongoose from 'mongoose';
+import dotenv from 'dotenv';
+dotenv.config();
 import userRouter from './routes/userRouter.js';
 import productRouter from './routes/productRouter.js';
 import verifyJWT from './middleware/auth.js';
@@ -10,7 +12,7 @@ import orderRouter from './routes/orderRoute.js';
 const app = express();
 
 //Connection Stiring
-mongoose.connect("mongodb+srv://admin:123@cluster0.fc5yt.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0").then(
+mongoose.connect(process.env.MONGO_URL).then(
     ()=>{
         console.log("Connected to MongoDB");
     }
