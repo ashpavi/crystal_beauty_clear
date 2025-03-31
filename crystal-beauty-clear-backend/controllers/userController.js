@@ -7,7 +7,7 @@ dotenv.config(); //configuring the dotenv package
 export function saveUser(req, res) {
 
     if(req.body.role== "admin"){     //ony admin can create another admin
-        if(req.user==null){     //if user is not logged in
+        if(req.user==null){     //if user is not logged in 
             res.status(403).json({
                 message:"Please login as admin before creating admin account"
             })
@@ -74,7 +74,8 @@ export function loginUser(req, res) {
                 const token=jwt.sign(userData,process.env.JWT_KEY)
                 res.json({
                     message:"Login successful",
-                    token:token
+                    token:token,
+                    user:userData,
                 })
 
 

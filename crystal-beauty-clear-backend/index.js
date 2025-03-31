@@ -7,9 +7,16 @@ import userRouter from './routes/userRouter.js';
 import productRouter from './routes/productRouter.js';
 import verifyJWT from './middleware/auth.js';
 import orderRouter from './routes/orderRoute.js';
+import cors from 'cors';
 
 
 const app = express();
+
+
+//Middleware to enable CORS (Cross-Origin Resource Sharing)
+app.use(cors({
+    origin: '*', // Allow all origins (you can specify specific origins if needed)
+}))
 
 //Connection Stiring
 mongoose.connect(process.env.MONGO_URL).then(
