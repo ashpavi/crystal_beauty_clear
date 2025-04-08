@@ -2,6 +2,8 @@ import { Link, Route, Routes } from "react-router-dom";
 import { AiFillProduct } from "react-icons/ai";
 import { FaUsers } from "react-icons/fa";
 import { FaWpforms } from "react-icons/fa";
+import AdminProductsPage from "./admin/products";
+import AddProducts from "./admin/addProduct";
 
 export default function AdminPage(){
     return(
@@ -12,11 +14,12 @@ export default function AdminPage(){
                 <Link to="/admin/orders" className="w-[290px] h-[50px] bg-gray-300 rounded-xl flex p-2 items-center m-[5px] hover:bg-gray-400"><FaWpforms className="mr-2"/>Orders</Link>
 
             </div>
-            <div className="h-full bg-white w-[calc(100vw-300px)] rounded-xl">
+            <div className="h-full bg-white w-[calc(100vw-300px)] rounded-lg">
                 <Routes path="/*">
                     <Route path="/users" element={<h1>Users</h1>} />
-                    <Route path="/products" element={<h1>Products</h1>} />
+                    <Route path="/products" element={<AdminProductsPage/>} />
                     <Route path="/orders" element={<h1>Orders</h1>} />
+                    <Route path="/addProduct" element={<AddProducts/>} />
                     <Route path="/*" element={<h1>404 Not Found</h1>} />
                 </Routes>
 
