@@ -1,20 +1,29 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import axios from "axios";
 import uploadMedia from "../../utils/mediaUpload";
 
-export default function AddProducts(){
-    const [productId, setProductId] = useState("");
-    const [productName, setProductName] = useState("");
-    const [alternativeNames, setAlternativeNames] = useState("");
-    const [price, setPrice] = useState("");
-    const [labeledPrice, setLabeledPrice] = useState("");
-    const [description, setDescription] = useState("");
-    const [stock, setStock] = useState("");
-    const [images, setImages] = useState([]);
-
+export default function EditProducts(){
+    const locationData = useLocation()
     const navigate= useNavigate()
+    if(locationData.state == null){
+        toast.error("Please selact a product to edit")
+        window.location.href = "/admin/products"
+    }
+
+
+    const [productId, setProductId] = useState(locationData.state.productId);
+    const [productName, setProductName] = useState(locationData.state.name);
+    const [alternativeNames, setAlternativeNames] = useState(locationData.state.alternativeNames.join(","));
+    const [price, setPrice] = useState(locationData.state.price);
+    const [labeledPrice, setLabeledPrice] = useState(locationData.state.labeledPrice);
+    const [description, setDescription] = useState(locationData.state.description);
+    const [stock, setStock] = useState(locationData.state.stock);
+    const [images, setImages] = useState([]);
+    console.log(locationData)
+
+    
 
 
    async function HandleSubmit(){
@@ -68,8 +77,9 @@ export default function AddProducts(){
     return(
         <div className="w-full h-full bg-gray-50 flex items-center justify-center rounded-lg">
             <div className="w-[500px] h-[600px] bg-white rounded-lg shadow-lg flex flex-col items-center justify-center">
-                <h1 className="text-2xl font-bold mb-4">Add Product</h1>
+                <h1 className="text-2xl font-bold mb-4">Edit Product</h1>
             <input 
+                disabled
                 value={productId} 
                 onChange={
                     (e)=>{
@@ -151,7 +161,7 @@ export default function AddProducts(){
             
             <div className="w-[400px] h-[100px] flex items-center justify-between rounded-lg">
                 <Link to="/admin/products" className="w-[180px] bg-red-500 rounded-lg flex items-center justify-center p-[10px] text-white  hover:bg-red-600 cursor-pointer">Cancel</Link>
-                <button onClick={HandleSubmit} className="bg-green-500 text-white w-[180px] p-[10px] hover:bg-green-600  ml-[10px] rounded-lg cursor-pointer">Add Product</button>
+                <button onClick={HandleSubmit} className="bg-green-500 text-white w-[180px] p-[10px] hover:bg-green-600  ml-[10px] rounded-lg cursor-pointer">Edit Product</button>
             </div>
 
             </div>
