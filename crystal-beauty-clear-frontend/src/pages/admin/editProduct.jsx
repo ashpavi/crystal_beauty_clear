@@ -36,11 +36,13 @@ export default function EditProducts(){
     }
     try{
 
-        const result= await Promise.all(promisesArray)
-        
+        let result= await Promise.all(promisesArray)
+        if(images.length == 0){
+            result = locationData.state.images
+        }
+
         const alternativeNamesArray = alternativeNames.split(",") //this will seperate the alternatives names with a comma and put them in an array
         const product = {
-            productId: productId,
             name: productName,
             alternativeNames: alternativeNamesArray,
             price: price,
@@ -54,17 +56,17 @@ export default function EditProducts(){
         const token= localStorage.getItem("token")
         console.log(token)
 
-        await axios.post(import.meta.env.VITE_BACKEND_URL+"/api/product", product, {
+        await axios.put(import.meta.env.VITE_BACKEND_URL+"/api/product/"+productId, product, {
                 headers: {
                     Authorization: "Bearer " + token
                 }
             })
-            toast.success("Product added successfully")
+            toast.success("Product updated successfully")
             navigate("/admin/products")
 
         }catch(error){
             console.log(error)
-            toast.error("File upload failed")
+            toast.error("File update failed")
         }
 
     }
@@ -77,7 +79,7 @@ export default function EditProducts(){
     return(
         <div className="w-full h-full bg-gray-50 flex items-center justify-center rounded-lg">
             <div className="w-[500px] h-[600px] bg-white rounded-lg shadow-lg flex flex-col items-center justify-center">
-                <h1 className="text-2xl font-bold mb-4">Edit Product</h1>
+                <h1 className="text-2xl font-bold mt-4 mb-4">Edit Product</h1>
             <input 
                 disabled
                 value={productId} 

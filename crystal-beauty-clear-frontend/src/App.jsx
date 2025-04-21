@@ -5,6 +5,8 @@ import LoginPage from './pages/loginPage'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import { Toaster } from 'react-hot-toast'
 import Testing from './pages/testing'
+import RegisterPage from './pages/client/registerpage'
+import HomePage from './pages/homepage'
 
 function App() {
   return(
@@ -13,11 +15,12 @@ function App() {
       <Routes path="/*">
         <Route path="/admin/*" element={<AdminPage />} />
         <Route path="/login" element={<LoginPage />} />
-        <Route path="/" element={<h1>Home Page</h1>} />
+        <Route path="/register" element={<RegisterPage />} />
+        <Route path="/*" element={<HomePage />} />
         <Route path="/testing" element={<Testing/>} />
 
 
-        <Route path="/*" element={<h1>404 Not Found</h1>} />
+        
       </Routes>
     </BrowserRouter>
   )

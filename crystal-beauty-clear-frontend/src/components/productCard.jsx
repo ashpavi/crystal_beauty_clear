@@ -1,15 +1,16 @@
 
 
 export default function ProductCard(props) {
-    console.log(props)
+    const product = props.product
 
     return(
-        <div className="productCard">
-            <h1>{props.name}</h1>
-            <p>{props.description}</p>
-            <p>{props.price}</p>
-            <button>Add to Cart</button>    
-
+        <div className="w-[250px] h-[350px] bg-amber-100 shadow-md rounded-lg m-3 ">
+            <img className="w-full h-[220px] object-cover rounded-t-lg" src ={product.images[0]}/>
+            <div className="h-[110px] w-full">
+                <span>{product.name}</span>
+                <p>{product.price.toFixed(2)}</p>
+                
+            </div>
         </div>
     )
 } 
