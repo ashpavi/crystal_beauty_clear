@@ -29,7 +29,7 @@ export default function ProductsPage(){
 
 
     return(
-        <div className="w-full h-full bg-gray-200 ">
+        <div className="w-full h-full  ">
             {
                 productLoaded?
                 <div className="w-full h-full flex flex-wrap items-center justify-center">
