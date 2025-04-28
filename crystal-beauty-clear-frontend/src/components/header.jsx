@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { TiShoppingCart } from "react-icons/ti";
 
 export default function Header() {
     return (
@@ -9,9 +10,10 @@ export default function Header() {
           <Link to="/products">Products</Link>
           <Link to="/contact">Contact Us</Link>
           <Link to="/reviews">Reviews</Link>
+          <Link to="/cart" className="absolute right-[30px] text-3xl"><TiShoppingCart /></Link>
         </div>
         
       </header>
     )
   }
-  
+   

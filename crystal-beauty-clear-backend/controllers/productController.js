@@ -109,7 +109,7 @@ export async function getProductById(req, res){
         
     }
     res.json({
-        product:productId
+        product:product
     })
     
 }

@@ -3,6 +3,7 @@ import { Link } from "react-router-dom"
 
 export default function ProductCard(props) {
     const product = props.product
+    
 
     return(
         <Link to={"/overview/"+product.productId} className="w-[250px] h-[350px] bg-white shadow-md rounded-lg m-3 ">
