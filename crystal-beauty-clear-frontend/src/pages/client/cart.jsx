@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
-import getCart, { addToCart, removeFromCart } from "../../utils/cart"
+import getCart, { addToCart, getTotal, getTotalForLabelledPrice, removeFromCart } from "../../utils/cart"
 import { FaTrashAlt } from "react-icons/fa";
+import {useNavigate} from "react-router-dom"
 
 export default function CartPage(){
 
     const [cartLoaded, setCartLoaded] = useState(false)
     const [cart, setCart] = useState([])
+    const navigate= useNavigate()
     useEffect(() => {
         if(cartLoaded === false){
             const cart = getCart()
@@ -60,10 +62,34 @@ export default function CartPage(){
                         )
                     })
                 }
+
                 {
                     cart.length === 0 && <div className="text-center text-lg font-semibold">Your cart is empty.</div>
                 }
 
+                <div className="w-full flex justify-end">
+                    <h1 className="w-[100px] text-[16px] font-semibold text-end pr-2">Total :</h1>
+                    <h1 className="w-[100px] text-[16px] font-semibold text-end pr-2">{getTotalForLabelledPrice().toFixed(2)}</h1>
+                </div>
+                <div className="w-full flex justify-end">
+                    <h1 className="w-[100px] text-[16px] font-semibold text-end pr-2">Discount :</h1>
+                    <h1 className="w-[100px] text-[16px] font-semibold text-end border-b-[2px] pr-2">{(getTotalForLabelledPrice()-getTotal()).toFixed(2)}</h1>
+                </div>
+                <div className="w-full flex justify-end">
+                    <h1 className="w-[100px] text-[16px] font-semibold text-end pr-2">Net Total :</h1>
+                    <h1 className="w-[100px] text-[16px] font-semibold text-end border-b-[4px] border-double pr-2">{getTotal().toFixed(2)}</h1>
+                </div>
+                <div className="w-full flex justify-end mt-4">
+                    <button className="w-[170px] h-[40px] text-[18px] font-semibold text-center shadow-2xl bg-pink-400 text-white pr-2 rounded-lg cursor-pointer" onClick={()=>{
+                        navigate("/checkout",
+                            {
+                                state :{
+                                    items : cart
+                                }
+                            }
+                        )
+                    }}>Checkout</button>
+                </div>
 
             </div>
             

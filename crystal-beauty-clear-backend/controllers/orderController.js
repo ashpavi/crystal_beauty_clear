@@ -1,6 +1,7 @@
 
 import Order from "../models/order.js";
-export function createOrder(req, res) {
+import Product from "../models/products.js";
+export async function createOrder(req, res) {
 
     if(req.user == null){
         res.status(401).json({
@@ -24,9 +25,9 @@ export function createOrder(req, res) {
     Order.find().sort({
         date: -1,                   //this will find the last bill that was created
 
-    }).limit(1).then((lastBills)=>{
+    }).limit(1).then(async (lastBills)=>{
         if(lastBills.length == 0){
-            orderData.orderID="ORD0001"  //if there is no last bill then the order id will be ORD0001
+            orderData.orderID="ORD0001"  //if there is no  last bill then the order id will be ORD0001
             }
         else{
             const lastBill=lastBills[0];         //if there is a last bill then the order id will be the last bill id +1
@@ -39,24 +40,35 @@ export function createOrder(req, res) {
         }
 
         console.log("Request Body:", body);
-        console.log("Bill Items:", body.billItems);
+        
 
 
         for(let i=0; i<body.billItems.length; i++){           //this will loop through all the bill items
-            const billItem =body.billItems[i];
+            const product = await Product.findOne({productId : body.billItems[i].productId})
+            if(product == null){
+                res.status(404).json({
+                    message : "Product with product id "+ body.billItems[i].productId +" not found"
+                })
+                return;
+            }
+            orderData.billItems[i]={
+                productId : product.productId,
+                productName : product.name,
+                image : product.images[0],
+                quantity :body.billItems[i].quantity,
+                price : product.price
+            }
+            orderData.total= orderData.total + product.price * body.billItems[i].quantity
+            }
 
-            //check if the product exists
-
-
-
-        }
     
         const order=new Order(orderData);         //create the new order with the order data
         order.save().then(()=>{
             res.status(201).json({
                 message:"Order created successfully"
             })
-        }).catch((err)=>{
+        }).catch((err)=>{   
+            console.error(err)
             res.status(500).json({
                 message:"Order not saved"
             })

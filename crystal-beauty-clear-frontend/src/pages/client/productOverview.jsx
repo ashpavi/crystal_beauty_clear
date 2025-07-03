@@ -1,7 +1,7 @@
 import axios from "axios"
 import { useEffect, useState } from "react"
 import { toast } from "react-hot-toast"
-import { useParams } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import Loader from "../../components/loader"
 import ImageSlider from "../../components/imageSlider"
 import getCart, { addToCart } from "../../utils/cart"
@@ -16,6 +16,7 @@ export default function ProductOverview() {
 
     const [product, setProduct] = useState(null)
     const [status, setStatus] = useState("loading")
+    const navigate = useNavigate()
 
     useEffect(
         ()=>{
@@ -77,7 +78,27 @@ export default function ProductOverview() {
                                     >
                                     Add to Cart
                                 </button>
-                                <button className="bg-pink-400 text-white w-[200px] h-[50px] rounded-lg hover:bg-pink-500 ml-[20px] cursor-pointer">Buy Now</button>
+                                <button 
+                                    onClick={()=>{
+                                        navigate("/checkout",{
+                                            state:{
+                                                items :[
+                                                    {
+                                                    productId : product.productId,
+                                                    name : product.name,
+                                                    alternativeNames : product.alternativeNames,
+                                                    price : product.price,
+                                                    labeledPrice : product.labeledPrice,
+                                                    image : product.images[0],
+                                                    quantity : 1,
+                                                    }
+                                                ]
+                                            }
+                                        } )
+                                    }}
+                                    className="bg-pink-400 text-white w-[200px] h-[50px] rounded-lg hover:bg-pink-500 ml-[20px] cursor-pointer">
+                                    Buy Now
+                                </button>
                                 </div>
 
 
