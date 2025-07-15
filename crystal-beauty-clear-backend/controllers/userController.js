@@ -3,6 +3,7 @@ import User from "../models/user.js";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv"; //importing the dotenv package
 dotenv.config(); //configuring the dotenv package
+import axios from "axios"; //importing the axios package to make HTTP requests
 
 export function saveUser(req, res) {
 
@@ -87,4 +88,20 @@ export function loginUser(req, res) {
         }  
         
     })
+}
+
+export async function googleLogin(req,res){
+    const accessToken = req.body.accessToken;
+
+    try{
+        const response = await axios.get("https://www.googleapis.com/oauth2/v3/userinfo", {
+            headers: {
+                    Authorization: 'Bearer ' + accessToken
+            }
+    })
+    console.log(response.data)
+    }catch(error){
+        console.error("Google login failed:", error);
+        res.status(500).json({ message: "Google login failed" });
+    }
 }

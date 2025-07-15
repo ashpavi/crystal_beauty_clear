@@ -2,6 +2,8 @@ import { useState } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { Link, useNavigate } from "react-router-dom";
+import { useGoogleLogin } from "@react-oauth/google";
+import { FcGoogle } from "react-icons/fc";
 
 export default function LoginPage(){
     const [email, setEmail] = useState("");
@@ -9,6 +11,16 @@ export default function LoginPage(){
 
     const [loading, setLoading] = useState(false);
     const navigate= useNavigate();
+    const loginWithGoogle= useGoogleLogin(
+        {
+        onSuccess:(res)=>{
+            setLoading(true);
+            axios.post(import.meta.env.VITE_BACKEND_URL+"/api/user/googleLogin", {
+                accessToken: res.access_token
+            })
+        }
+    }
+    )
 
     function handleLogin(){
         setLoading(true);
@@ -64,6 +76,16 @@ export default function LoginPage(){
                         {
                             loading?"Loading...": "Login"
                         }
+                        </button>
+                    {/* Google Login Button */}
+                        <button
+                        className="w-[400px] h-[50px] bg-white rounded-xl text-center text-gray-700 cursor-pointer m-[5px] hover:bg-gray-200 flex justify-center items-center gap-2"
+                        onClick={loginWithGoogle}
+                        >
+                        <FcGoogle className="text-xl" />
+                        <span>
+                            {loading ? "Loading..." : "Login with Google"}
+                        </span>
                         </button>
                         <p className="text-gray-700 text-center m-[10px]">
                             Don't have an account yet?

@@ -54,7 +54,7 @@ export async function createOrder(req, res) {
             orderData.billItems[i]={
                 productId : product.productId,
                 productName : product.name,
-                image : product.images[0],
+                images : product.images[0],
                 quantity :body.billItems[i].quantity,
                 price : product.price
             }
@@ -103,4 +103,33 @@ export function getOrders(req, res) {
             })
         })
     }
+}
+
+export async function updateOrder(req, res) {
+    try{
+    if(req.user == null){
+        res.status(401).json({
+            message:"Unauthorized, Only logged in users can update orders"
+        })
+        return;
+    }
+    if(req.user.role != "admin"){
+        res.status(403).json({
+            message:"Forbidden, Only admins can update orders"
+        })
+        return;
+    }
+    const orderID = req.params.orderID
+    const order =await Order.findOneAndUpdate({orderID: orderID}, req.body)
+
+    res.json({
+        message: "Order updated successfully",
+    })
+
+}catch(err){
+    console.error(err)
+    res.status(500).json({
+        message:"Order not updated"
+    })
+}
 }

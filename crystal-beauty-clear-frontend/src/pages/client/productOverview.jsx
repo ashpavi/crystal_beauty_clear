@@ -89,7 +89,7 @@ export default function ProductOverview() {
                                                     alternativeNames : product.alternativeNames,
                                                     price : product.price,
                                                     labeledPrice : product.labeledPrice,
-                                                    image : product.images[0],
+                                                    images : product.images[0],
                                                     quantity : 1,
                                                     }
                                                 ]

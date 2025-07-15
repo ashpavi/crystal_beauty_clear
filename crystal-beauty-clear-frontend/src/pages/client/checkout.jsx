@@ -76,7 +76,7 @@ export default function CheckoutPage() {
               <FaTrashAlt />
             </button>
 
-            <img src={item.image} className="h-24 w-24 object-cover rounded-xl mr-4" />
+            <img src={item.images} className="h-24 w-24 object-cover rounded-xl mr-4" />
             <div className="flex-1">
               <h2 className="text-lg font-semibold">{item.name}</h2>
               <p className="text-sm text-gray-500">{(item.alternativeNames || []).join(" | ")}</p>
