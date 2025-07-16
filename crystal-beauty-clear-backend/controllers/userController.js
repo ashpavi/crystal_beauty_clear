@@ -4,6 +4,7 @@ import jwt from "jsonwebtoken";
 import dotenv from "dotenv"; //importing the dotenv package
 dotenv.config(); //configuring the dotenv package
 import axios from "axios"; //importing the axios package to make HTTP requests
+import e from "express";
 
 export function saveUser(req, res) {
 
@@ -98,10 +99,71 @@ export async function googleLogin(req,res){
             headers: {
                     Authorization: 'Bearer ' + accessToken
             }
-    })
-    console.log(response.data)
+        })
+        const user = await User.findOne({
+                email: response.data.email
+                
+            })
+            if(user==null){
+                // If user does not exist, create a new user
+                const newUser = new User({
+                    email: response.data.email,
+                    firstName: response.data.given_name,
+                    lastName: response.data.family_name,
+                    role: "user",
+                    isEmailVerified: true,
+                    password : accessToken
+                })
+                await newUser.save()
+                
+
+                const userData={
+                    email: response.data.email,
+                    firstName: response.data.given_name,
+                    lastName: response.data.family_name,
+                    role: "user",
+                    isEmailVerified: true,
+                    isDisabled: false,
+                    phone :"Not Given",
+
+                }
+
+                const token=jwt.sign(userData,process.env.JWT_KEY,{
+                    expiresIn: '48h' // Set token expiration time
+                })
+
+                res.json({
+                    message:"Login successful",
+                    token:token,
+                    user:userData,
+                })
+            }else{
+                const userData={
+                    email: user.email,
+                    firstName: user.firstName,
+                    lastName: user.lastName,
+                    role: user.role,
+                    phone: user.phone,
+                    isDisabled: user.isDisabled,
+                    isEmailVerified: user.isEmailVerified
+
+                }
+                
+
+                const token=jwt.sign(userData,process.env.JWT_KEY,{
+                    expiresIn: '48h' // Set token expiration time
+                })
+
+                res.json({
+                    message:"Login successful",
+                    token:token,
+                    user:userData,
+                })
+            }
+
+        console.log(response.data)
     }catch(error){
-        console.error("Google login failed:", error);
-        res.status(500).json({ message: "Google login failed" });
+        console.error("Google login failed:", error)
+        res.status(500).json({ message: "Google login failed" })
     }
 }
