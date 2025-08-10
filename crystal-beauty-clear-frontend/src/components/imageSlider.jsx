@@ -7,9 +7,9 @@ export default function ImageSlider(props) {
 
     return(
         <div className="w-full h-full flex justify-center items-center">
-            <div className="bg-red-600 w-[70%] aspect-square relative rounded-lg">
-                <img src={activeImage} className="w-full h-full object-cover rounded-lg"/>
-                <div className="w-full h-[100px] backdrop-blur-2xl bottom-0 left-0 absolute flex justify-center items-center rounded-b-lg">
+            <div className=" w-[70%] aspect-square relative rounded-lg">
+                <img src={activeImage} className="w-full  h-full object-cover rounded-lg"/>
+                <div className="w-full h-[100px] backdrop-blur-2xl bottom-0 left-0 absolute hidden lg:flex justify-center items-center rounded-b-lg">
                     {
                         images.map(
                             (image, index) => {
@@ -25,6 +25,22 @@ export default function ImageSlider(props) {
                         )
                     }
 
+                </div>
+                <div className="absolute w-full h-[100px] bottom-[-100px] flex lg:hidden justify-center items-center  ">
+                        {
+                        images.map(
+                            (image, index) => {
+                                return(
+                                    <img key={index} src={image} className="h-[70px] aspect-square  object-cover mx-[5px] rounded-full cursor-pointer" 
+                                    onClick={
+                                        ()=> {
+                                            setActiveImage(image)
+                                        }
+                                    } />
+                                )
+                            }
+                        )
+                    }
                 </div>
 
             </div>

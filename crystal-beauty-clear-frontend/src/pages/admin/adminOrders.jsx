@@ -56,9 +56,10 @@ export default function AdminOrdersPage() {
                             <th >Order ID</th>
                             <th >Email</th>
                             <th >Name</th>
+                            <th >Phone No</th>
                             <th >Address</th>
                             <th >Status</th>
-                            <th >Phone No</th>
+                            
                             <th >Total</th>
                             <th >Date</th>
                             <th></th>
