@@ -1,4 +1,4 @@
-import { Link, Route, Routes } from "react-router-dom";
+import { Link, Route, Routes, useNavigate } from "react-router-dom";
 import { AiFillProduct } from "react-icons/ai";
 import { FaUsers } from "react-icons/fa";
 import { FaWpforms } from "react-icons/fa";
@@ -6,8 +6,37 @@ import AdminProductsPage from "./admin/products";
 import AddProducts from "./admin/addProduct";
 import EditProducts from "./admin/editProduct";
 import AdminOrdersPage from "./admin/adminOrders";
+import { useState } from "react";
+import { useEffect } from "react";
+import toast from "react-hot-toast";
+import axios from "axios";
 
 export default function AdminPage(){
+    const [userValidated, setUserValidated] = useState(false);
+    const navigate = useNavigate();
+    useEffect(()=>{
+        const token= localStorage.getItem("token");
+        if(token==null){
+            toast.error("You are not logged in");
+            navigate("/login"); 
+        }else{
+            axios.get(import.meta.env.VITE_BACKEND_URL + "/api/user/getuser", {
+                headers: {
+                    Authorization: "Bearer " + token
+                }
+            }).then((response) => {
+                if(response.data.user.role !== "admin"){
+                    toast.error("You are not authorized to access this page");
+                    navigate("/login");
+                }else{
+                    setUserValidated(true);
+                }
+            }).catch((error) => {
+                toast.error("You are not authorized to access this page");
+                navigate("/login");
+            });
+        }
+    })
     return(
         <div className="w-full h-screen bg-gray-500  flex p-2.5">
             <div className="h-full w-[300px] ">

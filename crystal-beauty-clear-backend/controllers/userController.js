@@ -167,3 +167,15 @@ export async function googleLogin(req,res){
         res.status(500).json({ message: "Google login failed" })
     }
 }
+
+export function getCurrentUser(req,res){
+    if(req.user== null){
+        res.status(403).json({
+            message: "Please login to get user information"
+        })
+        return
+    }
+    res.json({
+        user: req.user
+    })
+}
