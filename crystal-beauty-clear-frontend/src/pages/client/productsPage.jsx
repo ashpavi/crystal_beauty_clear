@@ -2,7 +2,7 @@ import axios from "axios"
 import { useEffect, useState } from "react"
 import Loader from "../../components/loader"
 import ProductCard from "../../components/productCard"
-import { searchProducts } from "../../../../crystal-beauty-clear-backend/controllers/productController"
+
 
 export default function ProductsPage(){
 
