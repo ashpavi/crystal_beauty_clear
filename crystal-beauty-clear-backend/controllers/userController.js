@@ -1,11 +1,23 @@
 import bcrypt from "bcrypt";
 import User from "../models/user.js";
 import jwt from "jsonwebtoken";
-import dotenv from "dotenv"; //importing the dotenv package
-dotenv.config(); //configuring the dotenv package
-import axios from "axios"; //importing the axios package to make HTTP requests
-import e from "express";
+import dotenv from "dotenv"; 
+import nodemailer from "nodemailer";
+import axios from "axios";
+import { OTP } from "../models/otp.js";
 
+dotenv.config();
+
+const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    host: 'smtp.gmail.com',
+    port: 587,
+    secure: false,
+    auth: {
+        user: "ashenpavithra@gmail.com",
+        pass: "zxaoudeybctuiqow",
+    },
+})
 export function saveUser(req, res) {
 
     if(req.body.role== "admin"){     //ony admin can create another admin
@@ -71,7 +83,7 @@ export function loginUser(req, res) {
                     isEmailVerified:user.isEmailVerified
 
                 }
-                console.log(userData)
+                
 
                 const token=jwt.sign(userData,process.env.JWT_KEY)
                 res.json({
@@ -161,7 +173,7 @@ export async function googleLogin(req,res){
                 })
             }
 
-        console.log(response.data)
+        
     }catch(error){
         console.error("Google login failed:", error)
         res.status(500).json({ message: "Google login failed" })
@@ -178,4 +190,82 @@ export function getCurrentUser(req,res){
     res.json({
         user: req.user
     })
+}
+
+export async function sendOTP(req,res){
+    const email = req.body.email;
+
+    const otp=Math.floor(Math.random()*9000)+1000; //generate 4 digit otp
+
+    const message={
+        from: "ashenpavithra@gmail.com",
+        to: email,
+        subject: "Your OTP for Password Reset",
+        text: `Your OTP for password reset is ${otp}.`
+    }
+
+    const newOTP = new OTP({
+        email: email,
+        otp: otp
+    })
+
+    newOTP.save().then(()=>{
+        console.log("OTP saved to database")
+    })
+
+    transporter.sendMail(message, (err,info)=>{
+        if(err){
+            console.error("Error sending OTP email:", err);
+            res.status(500).json({ message: "Error sending OTP email" });
+        }else{
+            console.log("OTP email sent:", info.response);
+            res.json({
+                message: "OTP sent successfully",
+                otp: otp // In a real application, do not send the OTP back in the response
+            });
+        }
+    })
+}
+
+export async function resetPassword(req,res){
+    const email= req.body.email;
+    const password= req.body.password;
+    const otp= req.body.otp;
+
+    try{
+       const lastOTPdata= await OTP.findOne(
+        {email: email}).sort({createdAt: -1}); //get the latest otp for the email
+
+        if(lastOTPdata==null){
+            res.status(400).json({
+                message: "No OTP found for this email"
+            })
+            return;
+        }
+
+        if(lastOTPdata.otp != otp){
+            res.status(400).json({
+                message: "Invalid OTP"
+            })
+            return;
+        }
+
+    const hashedPassword = bcrypt.hashSync(password,10)
+    await User.updateOne(
+        {email: email},
+        {password: hashedPassword}
+    )
+    await OTP.deleteMany({email: email})
+    res.json({
+        message: "Password reset successful"
+    })
+
+
+    }catch(e){
+        res.status(500).json({
+            message : "Error resetting password"
+        })
+    }
+
+
 }

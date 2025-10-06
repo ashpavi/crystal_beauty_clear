@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { TiShoppingCart } from "react-icons/ti";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { useState } from "react";
+import UserData from "./userData";
 
 
 export default function Header() {
@@ -15,6 +16,7 @@ export default function Header() {
           <Link to="/products">Products</Link>
           <Link to="/contact">Contact Us</Link>
           <Link to="/reviews">Reviews</Link>
+          <div className="absolute right-[100px] h-full"><UserData/></div>
           <Link to="/cart" className="absolute right-[30px] text-3xl"><TiShoppingCart /></Link>
         </div>
         {
